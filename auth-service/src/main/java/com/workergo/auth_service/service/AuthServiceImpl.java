@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
         User user=User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role("USER")
+                .role(request.getRole().toLowerCase())
                 .enabled(true)
                 .build();
 
@@ -44,9 +44,14 @@ public class AuthServiceImpl implements AuthService {
         User user=userRepository.findByEmail(request.getEmail())
                 .orElseThrow(()->new RuntimeException("Invalid email"));
 
-        if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
-            throw new RuntimeException("Invalid password");
+        if( request.getRole().equalsIgnoreCase(user.getRole())){
+            if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
+                throw new RuntimeException("Invalid password");
+            }
+        }else{
+            throw new RuntimeException("Invalid role");
         }
+
 
         return new AuthResponse("Login success");
     }
