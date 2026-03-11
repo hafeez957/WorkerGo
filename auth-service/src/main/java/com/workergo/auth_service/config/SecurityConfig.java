@@ -1,4 +1,4 @@
-package com.workergo.auth_service;
+package com.workergo.auth_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
